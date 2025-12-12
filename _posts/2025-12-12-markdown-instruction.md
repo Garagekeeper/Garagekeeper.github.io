@@ -1,9 +1,9 @@
 ﻿---
 title: "MarkDown instruction"
 date: 2025-12-12 15:18:38 +0900
-description:
+description: "마크다운 정리"
 categories: []
-tags: []
+tags: [markdown]
 ---
 
 
@@ -225,6 +225,7 @@ pin: true
 key: value
 ```
 ````
+<br>
 
 줄 번호 숨기기: .nolineno 클래스를 추가합니다.
 
@@ -234,6 +235,10 @@ echo 'No more line numbers!'
 ```
 ````
 `{: .nolineno }`
+
+<br>
+
+
 파일 이름 표시: file 속성을 추가합니다.
 
 ````
@@ -241,6 +246,8 @@ echo 'No more line numbers!'
 # 내용
 ```
 ````
+
+<br>
 {% raw %}
 `{: file="path/to/file" }`
 {% endraw %}
@@ -278,4 +285,4 @@ graph TD;
 ````
 
 ## 11. 더 알아보기 (Learn More)
-Jekyll 포스트에 대한 더 자세한 정보는 [Jekyll Docs: Posts](https://jekyllrb.com/docs/posts/)를 참고하세요.
+Jekyll 포스트에 대한 더 자세한 정보는 [Jekyll Docs: Posts]()를 참고하세요.
