@@ -285,4 +285,4 @@ graph TD;
 ````
 
 ## 11. 더 알아보기 (Learn More)
-Jekyll 포스트에 대한 더 자세한 정보는 [Jekyll Docs: Posts]()를 참고하세요.
+Jekyll 포스트에 대한 더 자세한 정보는 [Jekyll Docs: Posts](https://jekyllrb.com/docs/posts)를 참고하세요.
