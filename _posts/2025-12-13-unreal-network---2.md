@@ -1,7 +1,7 @@
 ﻿---
 title: "Unreal Network - 2"
 date: 2025-12-13 00:38:35 +0900
-description: 
+description: ""
 categories: [Computer Science, Unreal Network] #[upper, lower]
 tags: [unreal, cs, cpp, server] #must be lower
 math: true
