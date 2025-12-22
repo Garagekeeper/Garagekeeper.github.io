@@ -4,97 +4,76 @@ title: Portfolio
 permalink: /portfolio/
 ---
 
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Game Client Portfolio | Guns, Germs and Steel</title>
-  <link rel="stylesheet" href="/assets/css/portfolio.css">
-</head>
+<link rel="stylesheet" href="/assets/css/portfolio.css">
 
-<body>
-  <header class="hero">
-    <h1>Guns, Germs and Steel</h1>
-    <p class="subtitle">Unity FPS Project · Game Client Developer</p>
-  </header>
+<header class="hero">
+  <h1>Guns, Germs and Steel</h1>
+  <p class="subtitle">Unity FPS Project · Game Client Developer</p>
+</header>
 
-  <main>
-    <!-- Overview -->
-    <section>
-      <h2>프로젝트 개요</h2>
-      <p>
-        Unity 기반 FPS 싱글 플레이 프로젝트로,
-        전투 감각과 유지보수 가능한 클라이언트 구조를 동시에 고려하여 개발하였다.
-      </p>
-    </section>
+<main>
+  <!-- Overview -->
+  <section>
+    <h2>프로젝트 개요</h2>
+    <p>
+      Unity 기반 FPS 싱글 플레이 프로젝트로,
+      전투 감각과 유지보수 가능한 클라이언트 구조를 동시에 고려하여 개발하였다.
+    </p>
+  </section>
 
-    <!-- Roles -->
-    <section>
-      <h2>담당 역할</h2>
-      <ul>
-        <li>게임 클라이언트 전반 구조 설계 및 구현</li>
-        <li>사격·반동·조준 기반 전투 시스템 개발</li>
-        <li>Procedural Motion 기반 전투 연출 시스템 설계</li>
-        <li>UI–로직 의존성 분리 구조 설계</li>
-        <li>Addressables 기반 리소스 관리</li>
-      </ul>
-    </section>
+  <!-- Roles -->
+  <section>
+    <h2>담당 역할</h2>
+    <ul>
+      <li>게임 클라이언트 전반 구조 설계 및 구현</li>
+      <li>사격·반동·조준 기반 전투 시스템 개발</li>
+      <li>Procedural Motion 기반 전투 연출 시스템 설계</li>
+      <li>UI–로직 의존성 분리 구조 설계</li>
+      <li>Addressables 기반 리소스 관리</li>
+    </ul>
+  </section>
 
-    <!-- Video -->
-    <section>
+  <!-- Video -->
+  <section>
     <h2>플레이 영상</h2>
-        <div class="video-wrapper">
-            <iframe
-            src="https://www.youtube.com/embed/R_RAWjqdgTs"
-            title="Gameplay Video"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen>
-            </iframe>
-        </div>
-    </section>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/R_RAWjqdgTs"
+        title="Gameplay Video"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
 
-    <!-- Core System -->
-    <section>
-      <h2>핵심 시스템 설계</h2>
+  <!-- Core System -->
+  <section>
+    <h2>핵심 시스템 설계</h2>
 
-      <article>
-        <h3>Procedural Motion 기반 전투 연출</h3>
-        <p>
-          키프레임 애니메이션을 기반으로 유지하되,
-          사격·조준·이동 상태에 따라 Runtime 계산된 Motion을 합성하는
-          하이브리드 애니메이션 구조를 설계하였다.
-        </p>
+    <article>
+      <h3>Procedural Motion 기반 전투 연출</h3>
+      <p>
+        키프레임 애니메이션 기반 + Runtime 계산 Motion 합성 구조
+      </p>
 
-        <pre><code>
+      <pre><code>
 Input
  → Character Controller
  → Weapon / Combat Logic
  → Camera Procedural Motion
-        </code></pre>
-      </article>
+      </code></pre>
+    </article>
+  </section>
 
-      <article>
-        <h3>UI – 설정 시스템 분리</h3>
-        <p>
-          UI는 이벤트만 발생시키고,
-          실제 설정 적용은 SettingManager에서 담당하도록 분리하였다.
-          이를 통해 UI 구조 변경 시 로직 수정이 최소화되었다.
-        </p>
-      </article>
-    </section>
+  <!-- Diagram -->
+  <section>
+    <h2>시스템 구조 다이어그램</h2>
+    <img src="/assets/img/PatrickAvatar.jpg" alt="System Diagram">
+  </section>
 
-    <!-- Diagram -->
-    <section>
-      <h2>시스템 구조 다이어그램</h2>
-      <img src="assets/img/PatrickAvatar.jpg" alt="System Diagram">
-    </section>
-
-    <!-- Code -->
-    <section>
-      <h2>코드 예시</h2>
-      <pre><code class="code">
+  <!-- Code -->
+  <section>
+    <h2>코드 예시</h2>
+    <pre><code>
 void ApplyRecoil(float amount)
 {
     currentRecoil += amount;
@@ -103,29 +82,19 @@ void ApplyRecoil(float amount)
     cameraTransform.localRotation *=
         Quaternion.Euler(-currentRecoil, 0f, 0f);
 }
-      </code></pre>
-    </section>
+    </code></pre>
+  </section>
 
-    <!-- Links -->
-    <section>
-      <h2>관련 링크</h2>
-      <ul>
-        <li>
-          <a href="https://github.com/Garagekeeper/Guns_GermsAndSteel" target="_blank">
-            GitHub Repository
-          </a>
-        </li>
-        <li>
-          <a href="https://velog.io/@garage_keeper/series/isaac모작" target="_blank">
-            기술 블로그
-          </a>
-        </li>
-      </ul>
-    </section>
-  </main>
+  <!-- Links -->
+  <section>
+    <h2>관련 링크</h2>
+    <ul>
+      <li><a href="https://github.com/Garagekeeper/Guns_GermsAndSteel" target="_blank">GitHub Repository</a></li>
+      <li><a href="https://velog.io/@garage_keeper/series/isaac모작" target="_blank">기술 블로그</a></li>
+    </ul>
+  </section>
+</main>
 
-  <footer>
-    <p>© Garagekeeper · Game Client Developer</p>
-  </footer>
-</body>
-</html>
+<footer>
+  <p>© Garagekeeper · Game Client Developer</p>
+</footer>
