@@ -86,15 +86,15 @@ permalink: /portfolio
         <!-- prettier-ignore -->
         <div class="mermaid">
 flowchart LR
-Modifier["Modifier<br/> Calculates Transform offsets<br/> Runs every frame (Update)"]
-Animation["Animation<br/> Holds Modifiers<br/> Blends modifier results<br/> Progress: 0 → 1"]
-Animator["Animator<br/> Holds Animations<br/> Combines all offsets<br/> Applies to Target"]
-Target["Target Transform"]
+    Modifier["Modifier<br/>Offset 연산"]
+    Animation["Animation<br/>데이터 블렌딩"]
+    Animator["Animator<br/>최종 적용"]
+    Target["Target Transform"]
 
-Modifier -->|Offset| Animation
-Animation -->|Blended Offset| Animator
-Animator -->|Final Offset| Target
-</div>
+    Modifier --> Animation
+    Animation --> Animator
+    Animator --> Target
+        </div>
         <br />
         <details class="code-sample">
           <summary>코드 예시 (클릭시 펼쳐짐)</summary>
