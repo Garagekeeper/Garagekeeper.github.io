@@ -86,12 +86,11 @@ permalink: /portfolio
         <!-- prettier-ignore -->
         <div class="mermaid">
 flowchart LR
-%% Classes
 Modifier["Modifier<br/> Calculates Transform offsets<br/> Runs every frame (Update)"]
 Animation["Animation<br/> Holds Modifiers<br/> Blends modifier results<br/> Progress: 0 → 1"]
 Animator["Animator<br/> Holds Animations<br/> Combines all offsets<br/> Applies to Target"]
 Target["Target Transform"]
-%% Ownership / Data Flow
+
 Modifier -->|Offset| Animation
 Animation -->|Blended Offset| Animator
 Animator -->|Final Offset| Target
