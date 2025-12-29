@@ -4,97 +4,635 @@ title: Portfolio
 permalink: /portfolio/
 ---
 
-<link rel="stylesheet" href="/assets/css/portfolio.css">
-
-<header class="hero">
-  <h1>Guns, Germs and Steel</h1>
-  <p class="subtitle">Unity FPS Project · Game Client Developer</p>
-</header>
+<link rel="stylesheet" href="/assets/css/portfolio.css" />
 
 <main>
-  <!-- Overview -->
-  <section>
-    <h2>프로젝트 개요</h2>
-    <p>
-      Unity 기반 FPS 싱글 플레이 프로젝트로,
-      전투 감각과 유지보수 가능한 클라이언트 구조를 동시에 고려하여 개발하였다.
-    </p>
-  </section>
-
-  <!-- Roles -->
-  <section>
-    <h2>담당 역할</h2>
-    <ul>
-      <li>게임 클라이언트 전반 구조 설계 및 구현</li>
-      <li>사격·반동·조준 기반 전투 시스템 개발</li>
-      <li>Procedural Motion 기반 전투 연출 시스템 설계</li>
-      <li>UI–로직 의존성 분리 구조 설계</li>
-      <li>Addressables 기반 리소스 관리</li>
-    </ul>
-  </section>
-
-  <!-- Video -->
-  <section>
-    <h2>플레이 영상</h2>
-    <div class="video-wrapper">
-      <iframe
-        src="https://www.youtube.com/embed/R_RAWjqdgTs"
-        title="Gameplay Video"
-        allowfullscreen>
-      </iframe>
-    </div>
-  </section>
-
-  <!-- Core System -->
-  <section>
-    <h2>핵심 시스템 설계</h2>
-
-    <article>
-      <h3>Procedural Motion 기반 전투 연출</h3>
+  <div class="project-container">
+    <h1 class="ptitle">1. FPS 프레임워크 프로젝트</h1>
+    <!-- Overview -->
+    <section>
+      <h2>프로젝트 개요</h2>
       <p>
-        키프레임 애니메이션 기반 + Runtime 계산 Motion 합성 구조
+        Unity 기반 FPS 싱글 플레이 프로젝트로 Unity3D를 공부및 FPS 프레임워크를
+        만들기위한 프로젝트입니다.
       </p>
+    </section>
 
-      <pre><code>
-Input
- → Character Controller
- → Weapon / Combat Logic
- → Camera Procedural Motion
-      </code></pre>
-    </article>
-  </section>
+    <!-- ref -->
+    <section>
+      <h2>사용 기술</h2>
+      <ul>
+        <li>Unity 6.2</li>
+        <li>C#</li>
+      </ul>
+    </section>
 
-  <!-- Diagram -->
-  <section>
-    <h2>시스템 구조 다이어그램</h2>
-    <img src="/assets/img/PatrickAvatar.jpg" alt="System Diagram">
-  </section>
+    <!-- Roles -->
+    <section>
+      <h2>담당 역할</h2>
+      <ul>
+        <li>게임 클라이언트 전반 구조 설계 및 구현</li>
+      </ul>
+    </section>
 
-  <!-- Code -->
-  <section>
-    <h2>코드 예시</h2>
-    <pre><code>
-void ApplyRecoil(float amount)
+    <!-- Video -->
+    <section>
+      <h2>플레이 영상</h2>
+      <div class="video-wrapper">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/R_RAWjqdgTs"
+          title="Gameplay Video"
+          allowfullscreen
+        >
+        </iframe>
+      </div>
+    </section>
+
+    <!-- Core System -->
+    <section>
+      <h2>겪었던 문제와 해결 방안</h2>
+
+      <article>
+        <h3>1. 애니메이션 문제</h3>
+        <ul>
+          <li>
+            <strong>문제</strong>
+            <p>
+              키프레임 애니메이션만으로는 반동, 조준등 플레이어의 상태에 따라서
+              달라지는 움직임을 표현하기 힘들었습니다
+            </p>
+          </li>
+
+          <li>
+            <strong>선택</strong>
+            <p>
+              키프레임 애니메이션은 유지한 채 런타임에서 계산해 더해주는 방식을
+              선택했습니다.
+            </p>
+          </li>
+
+          <li>
+            <strong>결과</strong>
+            <ul>
+              <li>
+                그 결과 키프레임 애니메이션을 수정하지 않고도 여러 움직임을 쉽게
+                구현및 수정할 수 있었습니다
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <!-- prettier-ignore -->
+        <div class="mermaid">
+flowchart LR
+%% Classes
+Modifier["Modifier<br/>• Calculates Transform offsets<br/>• Runs every frame (Update)"]
+Animation["Animation<br/>• Holds Modifiers<br/>• Blends modifier results<br/>• Progress: 0 → 1"]
+Animator["Animator<br/>• Holds Animations<br/>• Combines all offsets<br/>• Applies to Target"]
+Target["Target Transform"]
+%% Ownership / Data Flow
+Modifier -->|Offset| Animation
+Animation -->|Blended Offset| Animator
+Animator -->|Final Offset| Target
+</div>
+        <br />
+        <details class="code-sample">
+          <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+          <a
+            href="https://github.com/Garagekeeper/Guns_GermsAndSteel"
+            target="_blank"
+            >Full Source(수정 필요)</a
+          >
+          <br />
+          <p><strong>Animator-Target에 적용할 최종 Transform 설정</strong></p>
+          <pre><code class="language-csharp">
+// ProceduralAnimator.cs
+private void UpdateSingleFrame()
 {
-    currentRecoil += amount;
-    currentRecoil = Mathf.Clamp(currentRecoil, 0f, maxRecoil);
+  if (Time.timeScale &lt;= 0) return;
 
-    cameraTransform.localRotation *=
-        Quaternion.Euler(-currentRecoil, 0f, 0f);
+  // 위치 값 결정
+  Vector3 position = DefaultPosition + TargetPosition;
+  Quaternion rotation = Quaternion.identity;
+
+
+  // 위치벡터가 유효하면 위치 이동.
+  if (IsVector3Valid(position))
+    transform.localPosition = position;
+  // 아니면 오류 출력
+  else
+    Debug.LogError($"Total outputs Nan position. Result animation position will be ignored.", this);
+
+  // 기준 회전과 목표 회전의 값이 유효하면
+  if(IsVector3Valid(DefaultRotation) && IsVector3Valid(TargetRotation))
+  {
+      // 회전값 기록
+      rotation = Quaternion.Euler(DefaultRotation + TargetRotation);
+  }
+  else
+  {
+    // 아니면 에러
+    Debug.LogError($"Total outputs Nan rotation. Result animation rotation will be ignored.", this);
+  }
+
+  // 최종 값 또한 유효하면
+  if (IsVector3Valid(DefaultRotation + TargetRotation))
+      // 기록했던 회전 값 적용
+      transform.localRotation = rotation;
 }
-    </code></pre>
-  </section>
+            </code></pre>
+          <br />
+          <p>
+            <strong>트리거와 애니메이션간의 연결</strong>
+          </p>
+          <pre><code class="language-csharp">
+// ProceduralAnimation.cs의 Tick() 중 일부
+// 입력 타입(Hold, Tab, Trigger 등)에 따라 애니메이션 재생/정지를 자동 결정
+if (triggerType == InputActionType.Hold)
+{
+    if (_triggerInputAction is null) return;
+    // 버튼을 누르고 있을 때 재생, 놓으면 정지
+    //if (_triggerInputAction.IsPressed() &amp;amp;&amp;amp; Progress &amp;lt; 0.9f) Play();
+    if (_triggerInputAction.IsPressed()) Play();
+    else Stop();
+}
 
-  <!-- Links -->
-  <section>
-    <h2>관련 링크</h2>
-    <ul>
-      <li><a href="https://github.com/Garagekeeper/Guns_GermsAndSteel" target="_blank">GitHub Repository</a></li>
-      <li><a href="https://velog.io/@garage_keeper/series/isaac모작" target="_blank">기술 블로그</a></li>
-    </ul>
-  </section>
+// 연결(Connection) 시스템을 통해 상태 간섭 해결
+// 지금 이 애니메이션과 연결된 연결의 목록
+// 연결은 target과 type 형태로 구성
+// 이 애니메이션이 target과 연결됨(type 형태로)
+foreach (ProceduralAnimationConnection connection in connections)
+{
+    // target이 Idle상태(재생X)일때 정지하는 애니메이션이면
+    if (connection.type == ProceduralAnimationConnectionType.PauseIfTargetIdle)
+    {
+        // target이 정지중이면 나도 정지
+        if (!connection.target.IsPlaying) Pause();
+        else Unpause();
+    }
+
+    // 타겟이 재생중이면 정지
+    if (connection.type == ProceduralAnimationConnectionType.PauseIfTargetPlaying)
+    {
+        // 재생중(Trigger)
+        if (connection.target.IsPlaying) Pause();
+        else Unpause();
+    }
+}
+            </code></pre>
+          <br />
+          <p><strong>부드러운 보간</strong></p>
+          <pre><code class="language-csharp">
+// ProceduralAnimation.cs의 UpdateProgress()
+private void UpdateProgress()
+{
+  //TODO 하드코딩 바꾸기
+  float masterSpeed = 1;
+
+  if (_isPlaying)
+    Progress = Mathf.SmoothDamp(Progress, 1, ref _currentVelocity, length / masterSpeed);
+
+  if (!_isPlaying || HasToAvoid())
+    Progress = Mathf.SmoothDamp(Progress, 0, ref _currentVelocity, length / masterSpeed);
+}
+            </code></pre>
+        </details>
+      </article>
+    </section>
+
+    <!-- Links -->
+    <section>
+      <h2>관련 링크</h2>
+      <ul>
+        <!--<li><a href="https://github.com/Garagekeeper/Guns_GermsAndSteel" target="_blank">GitHub Repository</a></li>-->
+        <!--<li><a href="https://velog.io/@garage_keeper/series/isaac모작" target="_blank">기술 블로그</a></li>-->
+      </ul>
+    </section>
+  </div>
+  <hr />
+
+  <div class="project-container">
+    <h1 class="ptitle">2. 아이작 모작 프로젝트</h1>
+
+    <!-- Overview -->
+    <section>
+      <h2>프로젝트 개요</h2>
+      <p>The Binding of issac을 Unity에서 구현해보는 개인 프로젝트입니다.</p>
+    </section>
+
+    <!-- ref -->
+    <section>
+      <h2>사용 기술</h2>
+      <ul>
+        <li>Unity 3.5</li>
+        <li>C#</li>
+        <li>Addressible</li>
+      </ul>
+    </section>
+
+    <!-- Roles -->
+    <section>
+      <h2>담당 역할</h2>
+      <ul>
+        <li>게임 클라이언트 전반 구조 설계 및 구현</li>
+      </ul>
+    </section>
+
+    <!-- Video -->
+    <section>
+      <h2>플레이 영상</h2>
+      <div class="video-wrapper">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/X_B_yyo6mb8"
+          title="Gameplay Video"
+          allowfullscreen
+        >
+        </iframe>
+      </div>
+    </section>
+
+    <!-- Core System -->
+    <section>
+      <h2>겪었던 문제와 해결 방안</h2>
+      <article>
+        <!--Problem 1-->
+        <div class="Problem">
+          <h3>1. 너무 많은 엔티티</h3>
+          <ul>
+            <li>
+              <strong>문제</strong>
+              <p>
+                로그라이크 특성상 아이템 수가 많아질수록 개별 스크립트로는
+                유지보수가 어려웠습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>선택</strong>
+              <p>
+                Data-Driven 구조를 도입해서 아이템의 정의를 외부 데이터(csv)로
+                분리했습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>결과</strong>
+              <ul>
+                <li>아이템 추가 시 코드 수정 없이 확장 가능했습니다.</li>
+                <li>밸런스 조정을 간편하게 할 수 있었습니다.</li>
+                <li>데이터 기반 구조로 협업 용이</li>
+              </ul>
+            </li>
+          </ul>
+          <details class="code-sample">
+            <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+            <pre><code class="language-csharp">
+// 런타임에 파싱한 정적 데이터
+[Serializable]
+public class ItemData
+{
+    public int DataId;
+    public string Name;
+    public int CoolTime;
+    public float DmgUp;
+}
+
+public class ItemDataLoader : ILoader&lt;int, ItemData&gt;
+{
+    public List&lt;ItemData&gt; items;
+
+    public Dictionary&lt;int, ItemData&gt; MakeDict()
+    {
+        var dict = new Dictionary&lt;int, ItemData&gt;();
+        foreach (var item in items)
+            dict[item.DataId] = item;
+        return dict;
+    }
+}
+            </code></pre>
+            <br />
+
+            <pre><code class="language-csharp">
+// 런타임에 template data로부터 생성된 아이템 인스턴스
+public class Item
+{
+    public int TemplateId { get; }
+    public int CurrentGage { get; private set; }
+
+    private ItemData Template =&gt;
+        Managers.Data.ItemDic[TemplateId];
+
+    public Item(int itemId)
+    {
+        TemplateId = itemId;
+        CurrentGage = Template.CoolTime;
+    }
+}
+            </code></pre>
+            <div>
+              <img src="/assets/img/csvimage1.png" alt="csv file sample" />
+            </div>
+          </details>
+        </div>
+        <br />
+
+        <!--Problem 2-->
+        <div class="Problem">
+          <h3>2. 랜덤 맵 생성</h3>
+          <ul>
+            <li>
+              <strong>문제</strong>
+              <p>
+                사전에 모든 스테이지 요소를 배치하는 방식은 로그라이크의 핵심
+                재미 요소인 랜덤성을 제공하기 어려웠습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>선택</strong>
+              <p>
+                런타임에 스테이지와 방(room)을 동적으로 생성하는 구조로
+                변경했습니다. 스테이지는 격자(grid) 형태로 구성하고, BFS
+                기반으로 전체 맵 형태를 결정했습니다. 각 방은 여러 타입의
+                프리팹으로 관리하여 런타임에 인스턴스화했습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>결과</strong>
+              <ul>
+                <li>시드 기반의 랜덤 맵 생성 구현</li>
+                <ul>
+                  <li>
+                    BFS를 사용해 시작 방에서 자연스럽게 확장되는 구조를 만들고,
+                    스테이지가 지나치게 선형적이거나 복잡해지는 것을
+                    방지했습니다.
+                  </li>
+                </ul>
+
+                <li>원작과 유사한 로그라이크 플레이 경험 제공</li>
+                <li>방 타입의 추가·제거가 쉬운 확장 가능한 구조 확보</li>
+              </ul>
+            </li>
+          </ul>
+          <details class="code-sample">
+            <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+            <a
+              href="https://github.com/Garagekeeper/Guns_GermsAndSteel"
+              target="_blank"
+              >Full Source</a
+            >
+            <br />
+            <p><strong>BFS 기반 방 생성 로직</strong></p>
+            <pre><code class="language-csharp">
+public int GenerateStage()
+{
+  Queue&lt;RoomClass&gt; roomClassQueue = new();
+  RoomClass rc;
+  Rooms = new List&lt;RoomClass&gt;();
+  int roomCnt = 0;
+
+  s_roomGraph = new int[9, 9];
+
+  //시작 위치
+  s_roomGraph[4, 4] = 1;
+  StartingRoom = new RoomClass(4, 4)
+  {
+    RoomType = ERoomType.Start
+  };
+  Rooms.Add(StartingRoom);
+
+  //1.BFS를 통한 방 생성
+  while (roomCnt &lt; Managers.Game.N)
+  {
+    roomClassQueue.Enqueue(Managers.Game.RNG.Choice(Rooms));
+
+    while (roomClassQueue.Count != 0)
+    {
+      RoomClass front = roomClassQueue.Dequeue();
+      //Right, Down, Left, Up
+      int[] dx = { 0, 1, 0, -1 };
+      int[] dy = { 1, 0, -1, 0 };
+
+      for (int i = 0; i &lt; 4; i++)
+      {
+          if (roomCnt == Managers.Game.N) break;
+          int nx = front.XPos + dx[i];
+          int ny = front.YPos + dy[i];
+
+          if (CanCreateRoom(nx, ny))
+          {
+              rc = new RoomClass(nx, ny);
+              front._adjacencentRooms[i] = rc;
+              rc._adjacencentRooms[(i + 2) % 4] = front;
+              s_roomGraph[nx, ny] = 1;
+              Rooms.Add(rc);
+              roomCnt++;
+              roomClassQueue.Enqueue(rc);
+          }
+      }
+    }
+  }
+}
+            </code></pre>
+            <p><strong>뭉쳐진 형태의 스테이지 생성 방지</strong></p>
+            <pre><code class="language-csharp">
+public bool CanCreateRoom(int x, int y)
+{
+  if (x &lt; 0 || x &gt;= s_mapMaxXofRoomArray) return false;
+  if (y &lt; 0 || y &gt;= s_mapMaxYofRoomArray) return false;
+  // 이미 방이 있다면 넘어간다.
+  if (s_roomGraph[x, y] == 1) return false;
+  // 인접한 방이 2개 이상이면 방을 생성하지 않는다.
+  if (CheckAdjacencyRoomCnt(x, y) &gt;= 2) return false;
+  // 위조건을 만족해도 50보다 작아야 방을 생성
+  if (!Managers.Game.RNG.Chance(50)) return false;
+  return true;
+}
+            </code></pre>
+            <p><strong>방(room) 인스턴스 생성</strong></p>
+            <pre><code class="language-csharp">
+public void GenerateRoom(RoomClass r, int index)
+{
+  //1.room 생성
+  r.WorldCenterPos = CalcRoomsWorldPos(r);
+
+  //room prfab 생성
+  GameObject room = CreateRoomPrefab(r);
+
+  // Select Random Map Collision
+  int roomId = SelectRoomId(r);
+
+  InitRoomClassField(r, room, roomId);
+
+  //room 위치, 이름 조정
+  SetRoomNameAndPos(r, room, index);
+
+  SetObstacle(r);
+  GenerateDoor(r);
+}
+            </code></pre>
+          </details>
+        </div>
+        <br />
+
+        <!--Problem 3-->
+        <div class="Problem">
+          <h3>3. 반복되는 단발적 사운드</h3>
+          <ul>
+            <li>
+              <strong>문제</strong>
+              <p>
+                단발적인 사운드가 많은 게임이라 짧은 AudioSource 인스턴스가 다수
+                생성·소멸되어 비효율적이었습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>선택</strong>
+              <p>사운드 풀을 만들어 관리하였습니다.</p>
+            </li>
+
+            <li>
+              <strong>결과</strong>
+              <ul>
+                <li>
+                  Audio Source 생성/파괴의 횟수를 줄여 GC 최적화를 할 수
+                  있었습니다.
+                </li>
+                <li>
+                  사운드 재생 로직을 중앙화하여 확장성과 유지보수성
+                  향상시켰습니다.
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <details class="code-sample">
+            <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+            <a
+              href="https://github.com/Garagekeeper/Guns_GermsAndSteel"
+              target="_blank"
+              >Full Source</a
+            >
+            <p><strong>SoundManager — AudioSource 풀 관리</strong></p>
+            <pre><code class="language-csharp">
+public class SoundManager
+{
+    public void ReturnSFXToPool(GameObject go)
+    {
+        // 큐에 넣을때는 active false로
+        if (go == null) return;
+        if (go.activeSelf == false) return;
+        _sfxPool.Enqueue(go);
+        go.SetActive(false);
+    }
+
+    public GameObject GetSFXFromPool()
+    {
+        // 큐에 남아있지 않으면 추가
+        if (_sfxPool.Count == 0)
+            AddNewSFXSource();
+
+        // 큐에서 뽑아내서 반환
+        GameObject sfx = _sfxPool.Dequeue();
+        sfx.SetActive(true);
+
+        return sfx;
+    }
+
+    // 오디오 클립 재생
+    public GameObject PlaySFX(AudioClip clip, float volume = 1f, bool isLoop = false)
+    {
+        GameObject sfx = GetSFXFromPool();
+        sfx.GetComponent&lt;SFXSource&gt;().Play(clip, volume, isLoop);
+        return sfx;
+    }
+}
+            </code></pre>
+            <br />
+
+            <p><strong>SFXSource — 재생 전용 컴포넌트</strong></p>
+            <pre><code class="language-csharp">
+public class SFXSource : MonoBehaviour
+{
+    private AudioSource _audioSource;
+    private Coroutine _coroutine;
+
+    private void Awake()
+    {
+        _audioSource = GetComponent&lt;AudioSource&gt;();
+        _audioSource.playOnAwake = false;
+        // 2D 라서 0
+        _audioSource.spatialBlend = 0f;
+    }
+
+    public void Play(AudioClip clip, float volume = 1f, bool isLoop = false)
+    {
+        StopAllCoroutines();
+        float delay = Random.Range(0f, 0.02f);
+        _audioSource.Play();
+        double offset = Random.Range(0f, 0.3f); // ±10ms 흔들기
+        _audioSource.PlayScheduled(AudioSettings.dspTime  + offset);
+
+        if (!isLoop)
+            _coroutine = StartCoroutine(CDisableAfterPlay());
+    }
+
+    private IEnumerator CDisableAfterPlay()
+    {
+        yield return new WaitForSeconds(_audioSource.clip.length + 0.1f);
+        Managers.Sound.ReturnSFXToPool(gameObject);
+    }
+}
+            </code></pre>
+          </details>
+        </div>
+
+        <br />
+      </article>
+    </section>
+
+    <!-- Links -->
+    <section>
+      <h2>관련 링크</h2>
+      <ul>
+        <li>
+          <a
+            href="https://github.com/Garagekeeper/Guns_GermsAndSteel"
+            target="_blank"
+            >GitHub Repository</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://garagekeeper.github.io/categories/gunsgermsandsteel/"
+            target="_blank"
+            >기술 블로그</a
+          >
+        </li>
+      </ul>
+    </section>
+  </div>
+  <hr />
 </main>
 
-<footer>
-  <p>© Garagekeeper · Game Client Developer</p>
-</footer>
+<!--mermaid-->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: "dark" });
+</script>
+
+<!--Highlight.js-->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+<script>
+  hljs.highlightAll();
+</script>

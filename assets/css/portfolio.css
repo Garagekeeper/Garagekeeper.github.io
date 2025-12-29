@@ -13,7 +13,7 @@
 
 body {
   margin: 0;
-  font-family: "Noto Sans KR", system-ui, sans-serif;
+  font-family: 'Noto Sans KR', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.7;
@@ -23,6 +23,11 @@ body {
   padding: 3rem 1rem;
   text-align: center;
   border-bottom: 1px solid var(--border);
+}
+
+.ptitle {
+  padding: 3rem 1rem;
+  text-align: center;
 }
 
 .hero h1 {
@@ -102,4 +107,28 @@ footer {
   padding: 2rem 1rem;
   border-top: 1px solid var(--border);
   color: var(--sub);
+}
+
+/* Code toggle style for Chirpy */
+details.code-toggle {
+  margin: 1rem 0;
+  border-radius: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border-color);
+  padding: 0.5rem 1rem;
+}
+
+details.code-toggle summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--link-color);
+  list-style: none;
+}
+
+details.code-toggle summary::-webkit-details-marker {
+  display: none;
+}
+
+details.code-toggle pre {
+  margin-top: 0.75rem;
 }
