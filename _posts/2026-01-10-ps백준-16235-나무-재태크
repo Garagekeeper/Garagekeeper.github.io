@@ -1,0 +1,163 @@
+---
+title: "[PS][백준 16235] 나무재태크"
+date: 2026-01-10 12:37:01 +0900
+description: ""
+categories: [Computer Science, Algorithm] #[upper, lower]
+tags: [cpp, ps, algorithm, simulation] #must be lower
+math: true
+mermaid: true
+---
+
+
+### 1) 문제
+>**문제 설명**
+[나무 재태크](https://www.acmicpc.net/problem/16235)
+
+**입력**
+첫째 줄에 N, M, K가 주어진다.
+
+둘째 줄부터 N개의 줄에 A배열의 값이 주어진다. r번째 줄의 c번째 값은 A[r][c]이다.
+
+다음 M개의 줄에는 상도가 심은 나무의 정보를 나타내는 세 정수 x, y, z가 주어진다. 처음 두 개의 정수는 나무의 위치 (x, y)를 의미하고, 마지막 정수는 그 나무의 나이를 의미한다.
+>
+**출력**
+첫째 줄에 K년이 지난 후 살아남은 나무의 수를 출력한다.
+<br>
+
+
+### 2) 문제 분석 및 풀이
+#### 1) 설계, 분석
+주어진 조건을 따라서 시뮬레이션 하는 문제.
+적절한 자료구조를 세우고 흐름을 따라가자.
+#### 2) 풀이
+>```cpp
+#include <iostream>
+#include <set>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
+const int MAX = 11;
+int feed[MAX][MAX]; 
+int A[MAX][MAX];
+int N,M,K;
+
+vector<int> treeVec[MAX][MAX];
+map<std::pair<int,int>,vector<int>> deadTree;
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> N >> M >> K;
+    for (int i=1; i<=N; i++)
+    {
+        for (int j=1; j<=N; j++)
+        {
+            feed[i][j] = 5;
+            cin >> A[i][j];
+        }
+    }
+
+    for (int i=0; i<M; i++)
+    {
+        int r,c,age;
+        cin >> r >> c >> age;
+        treeVec[r][c].push_back(age);
+        sort(treeVec[r][c].begin(), treeVec[r][c].end());
+    }
+
+    for (int i=0; i<K; i++)
+    {
+        for (int i=1; i<=N; i++)
+        {
+            for (int j=1; j<=N ;j++)
+            {
+                vector<int> afterVec;
+                for (auto age : treeVec[i][j])
+                {
+                    if (feed[i][j] >= age)
+                    {
+                        feed[i][j] -= age;
+                        afterVec.push_back(age+1);
+                    }
+                    else 
+                    {
+                        deadTree[{i,j}].push_back(age/2);
+                    }
+                }
+                treeVec[i][j] = afterVec;
+            }
+        }
+
+        //summer
+        for (auto [TreePos,treeVec] : deadTree)
+        {
+            for (auto treeAge : treeVec)
+                feed[TreePos.first][TreePos.second] += treeAge;
+        }
+
+        deadTree.clear();
+
+        //fall
+        for (int i=1; i<=N; i++)
+        {
+            for (int j=1; j<=N ;j++)
+            {
+                for(auto age : treeVec[i][j])
+                {
+                    if (age % 5 == 0)
+                    {
+                        for (int ni=-1; ni<=1; ni++)
+                        {
+                            for (int nj=-1; nj<=1; nj++)
+                            {
+                                int nx = ni + i;
+                                int ny = nj + j;
+
+                                if (nx == i && ny == j) continue;
+                                if (nx < 1 || nx > N) continue;
+                                if (ny < 1 || ny > N) continue;
+                                treeVec[nx][ny].push_back(1);
+                            }
+                        }
+                    }
+                } 
+            }
+        }
+
+        for (int i=1; i<=N; i++)
+        {
+            for (int j=1; j<=N ;j++)
+            {
+                sort(treeVec[i][j].begin(), treeVec[i][j].end());
+            }
+        }
+
+        //winter
+        for (int i=1; i<=N; i++)
+        {
+            for (int j=1; j<=N; j++)
+            {
+                feed[i][j] += A[i][j];
+            }
+        }
+    }
+
+    int ans = 0;
+    for (int i=1; i<=N; i++)
+    {
+        for (int j=1; j<=N ;j++)
+        {
+            ans += treeVec[i][j].size();
+        }
+    }
+
+    cout << ans <<"\n";
+
+    return 0;
+}
+>```
