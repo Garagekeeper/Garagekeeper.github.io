@@ -38,7 +38,7 @@ github:
   username: GarageKeeper # change to your GitHub username
 
 #twitter:
-  #username: twitter_username # change to your Twitter username
+#username: twitter_username # change to your Twitter username
 
 social:
   # Change to your full name.
@@ -124,7 +124,7 @@ comments:
     shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
   # utterances settings › https://utteranc.es/
   utterances:
-    repo:  GarageKeeper/GarageKeeper.github.io # <gh-username>/<repo>
+    repo: GarageKeeper/GarageKeeper.github.io # <gh-username>/<repo>
     issue_term: pathname # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
@@ -224,7 +224,6 @@ exclude:
   - purgecss.js
   - "*.config.js"
   - "package*.json"
-  - "_posts/"
 
 jekyll-archives:
   enabled: [categories, tags]
