@@ -29,3 +29,5 @@ assets/js/dist
 
 #power shell
 *.ps1
+
+_config.local.yml

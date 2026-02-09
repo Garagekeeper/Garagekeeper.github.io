@@ -42,7 +42,7 @@ permalink: /portfolio
         <iframe
           width="560"
           height="315"
-          src="https://www.youtube.com/embed/R_RAWjqdgTs"
+          src="https://www.youtube.com/embed/g_O869B6rdk"
           title="Gameplay Video"
           allowfullscreen
         >
@@ -55,48 +55,49 @@ permalink: /portfolio
       <h2>겪었던 문제와 해결 방안</h2>
 
       <article>
-        <h3>1. 애니메이션 문제</h3>
-        <ul>
-          <li>
-            <strong>문제</strong>
-            <p>
-              키프레임 애니메이션만으로는 반동, 조준등 플레이어의 상태에 따라서
-              달라지는 움직임을 표현하기 힘들었습니다
-            </p>
-          </li>
+        <div class="Problem1">
+          <h3>1. 애니메이션 문제</h3>
+          <ul>
+            <li>
+              <strong>문제</strong>
+              <p>
+                키프레임 애니메이션만으로는 반동, 조준등 플레이어의 상태에
+                따라서 달라지는 움직임을 표현하기 힘들었습니다
+              </p>
+            </li>
 
-          <li>
-            <strong>선택</strong>
-            <p>
-              키프레임 애니메이션은 유지한 채 런타임에서 계산해 더해주는 방식을
-              선택했습니다.
-            </p>
-          </li>
+            <li>
+              <strong>선택</strong>
+              <p>
+                키프레임 애니메이션은 유지한 채 런타임에서 계산해 더해주는
+                방식을 선택했습니다.
+              </p>
+            </li>
 
-          <li>
-            <strong>결과</strong>
-            <ul>
-              <li>
-                그 결과 키프레임 애니메이션을 수정하지 않고도 여러 움직임을 쉽게
-                구현및 수정할 수 있었습니다
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <div>
-          <img src="/assets/img/flowchart1.png" alt="flowchart1" />
-        </div>
-        <br />
-        <details class="code-sample">
-          <summary>코드 예시 (클릭시 펼쳐짐)</summary>
-          <a
-            href="https://github.com/Garagekeeper/Guns_GermsAndSteel"
-            target="_blank"
-            >Full Source(수정 필요)</a
-          >
+            <li>
+              <strong>결과</strong>
+              <ul>
+                <li>
+                  그 결과 키프레임 애니메이션을 수정하지 않고도 여러 움직임을
+                  쉽게 구현및 수정할 수 있었습니다
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <div>
+            <img src="/assets/img/flowchart1.png" alt="flowchart1" />
+          </div>
           <br />
-          <p><strong>Animator-Target에 적용할 최종 Transform 설정</strong></p>
-          <pre><code class="language-csharp">
+          <details class="code-sample">
+            <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+            <a
+              href="https://github.com/Garagekeeper/Guns_GermsAndSteel"
+              target="_blank"
+              >Full Source(수정 필요)</a
+            >
+            <br />
+            <p><strong>Animator-Target에 적용할 최종 Transform 설정</strong></p>
+            <pre><code class="language-csharp">
 // ProceduralAnimator.cs
 private void UpdateSingleFrame()
 {
@@ -132,11 +133,9 @@ private void UpdateSingleFrame()
       transform.localRotation = rotation;
 }
             </code></pre>
-          <br />
-          <p>
-            <strong>트리거와 애니메이션간의 연결</strong>
-          </p>
-          <pre><code class="language-csharp">
+            <br />
+            <p><strong>트리거와 애니메이션간의 연결</strong></p>
+            <pre><code class="language-csharp">
 // ProceduralAnimation.cs의 Tick() 중 일부
 // 입력 타입(Hold, Tab, Trigger 등)에 따라 애니메이션 재생/정지를 자동 결정
 if (triggerType == InputActionType.Hold)
@@ -171,9 +170,9 @@ foreach (ProceduralAnimationConnection connection in connections)
     }
 }
             </code></pre>
-          <br />
-          <p><strong>부드러운 보간</strong></p>
-          <pre><code class="language-csharp">
+            <br />
+            <p><strong>부드러운 보간</strong></p>
+            <pre><code class="language-csharp">
 // ProceduralAnimation.cs의 UpdateProgress()
 private void UpdateProgress()
 {
@@ -187,7 +186,458 @@ private void UpdateProgress()
     Progress = Mathf.SmoothDamp(Progress, 0, ref _currentVelocity, length / masterSpeed);
 }
             </code></pre>
-        </details>
+          </details>
+        </div>
+        <div class="Problem2">
+          <h3>2. UI 디자인패턴</h3>
+          <ul>
+            <li>
+              <strong>문제</strong>
+              <p>
+                기존 구조에서는 컨트롤러가 입력 처리, 게임 로직, UI 갱신을
+                동시에 담당하면서 클래스가 비대해졌고, UI 수정 시 로직 전반에
+                영향을 주는 문제가 발생했습니다. 이에 따라 UI와 게임 로직을
+                명확히 분리할 수 있는 구조가 필요하다고 판단했습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>선택</strong>
+              <p>
+                여러 UI 아키텍처 중 MVP 패턴을 선택했습니다. View와 로직 분리의
+                필요성과 프로젝트 규모를 고려해 MVP가 적합하다고 판단했습니다.
+                MVVM의 경우 본 프로젝트의 UI 복잡도에 비해 과하다고 판단하여
+                제외했습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>결과</strong>
+              <p>
+                UI 관련 로직을 Presenter로 분리함으로써 컨트롤러에서 View를 직접
+                수정하거나 Model과 UI가 강하게 결합되는 구조를 개선할 수
+                있었습니다. View는 UI 표시에 집중하고, Presenter에서 상태 판단과
+                UI 로직을 처리함으로써 구조가 명확해졌습니다. 그 결과, 예를 들어
+                탄약 부족 경고 UI가 정상적으로 동작하지 않을 경우 해당 UI의
+                Presenter를 중심으로 빠르게 원인을 추적할 수 있어 디버깅과
+                유지보수가 수월해졌습니다.
+              </p>
+            </li>
+          </ul>
+          <br />
+          <details class="code-sample">
+            <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+            <pre><code class="language-csharp">
+public class FirearmHUD : UIBase, IView
+{
+  [Header("Text")]
+  public TextMeshProUGUI firearmNameText;
+  public TextMeshProUGUI ammoTypeNameText;
+  public TextMeshProUGUI ammoInMagazineText;
+  public TextMeshProUGUI ammoInInventoryText;
+  public GameObject outOfAmmoAlert;
+  public GameObject lowAmmoAlert;
+        
+  [Header("Colors")]
+  public Color normalColor = Color.white;
+  public Color alertColor = Color.red;
+
+  // UI 갱신
+  public void UpdateAmmoDisplay(int inMagazine, int inInventory, int maxCap, bool isLow)
+  {
+      // ammo
+      ammoInMagazineText.text = inMagazine.ToString();
+      ammoInInventoryText.text = inInventory.ToString();
+  
+      // ammo alert
+      outOfAmmoAlert.SetActive(inMagazine &lt;= 0);
+      lowAmmoAlert.SetActive(isLow);
+      ammoInMagazineText.color = isLow ? alertColor : normalColor;
+  }
+
+  // 무기 이름 갱신
+  public void UpdateNameDisplay(string firearmName)
+  {
+      firearmNameText.text = firearmName;
+  }
+  
+  public void Show()
+  {
+      gameObject.SetActive(true);
+  }
+
+  public void Hide()
+  {
+      gameObject.SetActive(false);
+  }
+}
+
+            </code></pre>
+
+            <pre><code class="language-csharp">
+
+public class FirearmHUDPresenter : Presenter&lt;FirearmHUD, InventoryCore&gt;
+{
+  private Firearm _activeFirearm;
+  
+  public FirearmHUDPresenter(FirearmHUD view, InventoryCore model) : base(view, model)
+  {
+      
+  }
+  public override void Init()
+  {
+      model.OnItemSwapped += HandleWeaponSwap;
+  }
+
+  // 무기가 변동되었을 때 이벤트를 통해 호출되는 함수
+  private void HandleWeaponSwap(Firearm newFirearm)
+  {
+      //0. 기존 이벤트 해제
+      if (_activeFirearm != null)
+          _activeFirearm.OnAmmoChanged -= UpdateAmmoUI;
+      
+      //1. 새 무기로 교체
+      _activeFirearm = newFirear 
+      if (_activeFirearm != null)
+      {
+          //2. 새 무기의 이벤트 구독
+          _activeFirearm.OnAmmoChanged += UpdateAmmoUI;
+          
+          //3. UI갱신
+          UpdateAmmoUI(_activeFirearm.AmmoInMagazine, _activeFirearm.ammoItemInInventory.Count, _activeFirearm.fireArmData.magazineCapacity);
+          UpdateFirearmNameUI(_activeFirearm.fireArmData.firearmName);
+      }
+  }
+  
+  // UI의 장탄수 갱신
+  private void UpdateAmmoUI(int mag, int inv, int maxCap)
+  {
+      var isLow = mag > 0 && mag &lt;= maxCap / 3;
+      view.UpdateAmmoDisplay(mag, inv, maxCap, isLow);
+  }
+
+  // UI의 무기 이름 갱신
+  private void UpdateFirearmNameUI(string firearmName)
+  {
+      view.UpdateNameDisplay(firearmName);
+  }
+
+  public override void Release()
+  {
+      model.OnItemSwapped -= HandleWeaponSwap;
+      if (_activeFirearm != null)
+      {
+          _activeFirearm.OnAmmoChanged -= UpdateAmmoUI;
+          _activeFirearm.OnFirearmNameChanged -= UpdateFirearmNameUI;
+      }
+  }
+}
+
+            </code></pre>
+
+            <pre><code class="language-csharp">
+//Firearm.cs
+/*-------------------------
+ *           Ammo
+-------------------------*/
+        
+/// &lt;summary&gt;
+/// 현재 화기에 필요한 탄약 타입 클래스
+/// &lt;/summary&gt;
+public AmmoType requiredAmmoType;
+/// &lt;summary&gt;
+/// 실제 가지고 있는 탄약 수
+/// num of bullet player has;
+/// &lt;/summary&gt;
+public AmmoItem ammoItemInInventory;
+
+private int _ammoInMagazine;
+public int AmmoInMagazine
+{
+    get => _ammoInMagazine;
+    set
+    {
+        _ammoInMagazine = value;
+        OnAmmoChanged?.Invoke(_ammoInMagazine, ammoItemInInventory.Count, fireArmData.magazineCapacity);
+    }
+}
+            </code></pre>
+
+            <pre><code class="language-csharp">
+//InventoryCore.cs
+public event Action&lt;Firearm&gt; OnItemSwapped;
+
+// 무기를 변경할 때 사용하는 함수
+public void SwapItem(int index)
+{
+    // 0. 같은 번호면 종료
+    if (SelectedIndex == index) return;
+    // 1. 이전 무기 끄기
+    OffFirearm(SelectedIndex);
+    // 2. 인덱스 갱신
+    SelectedIndex = index;
+    // 3.새 무기 켜기
+    OnFirearm(SelecedIndex);
+    // 4.swap 이벤트 Invoke
+    OnItemSwapped?.Invoke(items[SelectedIndex]);
+}
+            </code></pre>
+            <br />
+          </details>
+        </div>
+        <div class="Problem3">
+          <h3>3. 데이터 관리 및 풀링</h3>
+          <ul>
+            <li>
+              <strong>문제</strong>
+              <p>
+                능력과 프리셋과 같은 게임 데이터가 코드와 강하게 결합되어 있어
+                수치 조정이나 밸런스 변경 시 코드 수정과 재컴파일이 빈번하게
+                발생했습니다. 또한 전투 중 자주 생성·삭제되는 오브젝트를
+                효율적으로 관리할 수 있는 구조가 필요했습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>선택</strong>
+              <p>
+                이전 프로젝트에서는 CSV 기반 데이터 관리와 Addressables를 통한
+                리소스 로딩, 그리고 자체 구현한 풀링 시스템을 사용했지만, 본
+                프로젝트에서는 데이터 규모와 개발 흐름을 고려해
+                ScriptableObject와 Unity에서 제공하는 Object Pool을
+                선택했습니다. 정적 데이터의 비중이 높고 초기 로딩 비용이
+                부담되지 않는 구조였기 때문에, 런타임 로딩 복잡도를 줄이고
+                에디터 중심의 빠른 반복 개발에 더 적합한 방식을 우선했습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>결과</strong>
+              <ul>
+                <li>
+                  ScriptableObject를 통해 능력 정보, 수치, 프리셋을 코드 수정
+                  없이 에디터에서 관리할 수 있어 수치 조정과 반복 테스트가
+                  수월해졌습니다. 또한 동일한 데이터를 여러 코드에서
+                  참조하더라도 일관성을 유지할 수 있었습니다.
+                </li>
+                <li>
+                  Unity Object Pool을 적용하여 SFX, Enemy, 경험치 Gem 등 전투 중
+                  빈번하게 생성 / 삭제되는 오브젝트를 재사용함으로써, 오브젝트
+                  관리 구조를 단순화할 수 있었습니다.
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <details class="code-sample">
+            <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+            <pre><code class="language-csharp">
+// PoolManager.cs의 일부
+// 유니티에서 제공하는 Pool 사용
+internal class Pool
+{
+    private GameObject _prefab;
+    public IObjectPool&lt;GameObject&gt; _pool;
+    private Transform _rootTransform;
+    public Transform RootTransform
+    {
+        get =&gt; _rootTransform;
+        set =&gt; _rootTransform = value;
+    }
+
+    public Pool(ObjectPreset preset, Transform parent)
+    {
+        _prefab = preset.prefab;
+        RootTransform = parent;
+        // Unity에서 제공하는 Pool
+        // createFunc, OnGet, OnRelease, OnDestroy, 중복 반환 여부, 초기사이즈 , 최대사이즈
+        _pool = new ObjectPool&lt;GameObject&gt;(OnCreate, OnGet, OnRelease, OnDestroy, true, preset.initialSize);
+    }
+
+    // 풀에 push하는건 사용이 끝나서 반환 하는것
+    public void Push(GameObject go)
+    {
+        if (go.activeSelf)
+            _pool.Release(go);
+    }
+
+    // 사용하기 위해서 Pool에서 가져옴
+    public GameObject Pop()
+    {
+        return _pool.Get();
+    }
+}
+            </code></pre>
+            <pre><code class="language-csharp">
+// PoolManager.cs의 일부
+public class PoolManager
+{
+    private Dictionary&lt;string, Pool&gt; _pools =  new ();
+
+    // 풀에 반환
+    public bool Push(GameObject go)
+    {
+        // 해당 오브젝트를 위한 풀이 없으면 실패
+        if (!_pools.ContainsKey(go.name))
+            return false;
+
+        _pools[go.name].Push(go);
+        return true;
+    }
+
+    /// &lt;summary&gt;
+    /// 프리셋 기반풀링 Pop
+    /// &lt;/summary&gt;
+    /// &lt;param name="objectPreset"&gt;&lt;/param&gt;
+    /// &lt;param name="parent"&gt;&lt;/param&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public GameObject Pop(ObjectPreset objectPreset, Transform parent = null)
+    {
+        if (!_pools.ContainsKey(objectPreset.prefab.name))
+            CreatePool(objectPreset, parent);
+        
+        return  _pools[objectPreset.prefab.name].Pop();
+    }
+
+    private void CreatePool(ObjectPreset objectPreset, Transform parent = null)
+    {
+        Pool pool = new Pool(objectPreset, parent);
+        _pools.Add(objectPreset.prefab.name, pool);
+    }
+
+    public void ResetPool()
+    {
+        _pools.Clear();
+    }
+}
+            </code></pre>
+            <pre><code class="language-csharp">
+// ResourceManager.cs
+public GameObject Instantiate(EObjectID key, Vector3 pos = default(Vector3), Transform parent = null)
+{
+  GameObject go = null;
+  ObjectPreset preset = _sourceCatalog.GetObjPreset(key);
+  if (preset == null)
+  {
+      Debug.LogError($"Failed to load preset : {key}");
+      return null;
+  }
+
+  if (preset.poolable)
+  {
+      go = HeadManager.Pool.Pop(preset, parent);
+      return go;
+  }
+            
+  go = Object.Instantiate(preset.prefab, pos, Quaternion.identity, parent);
+  go.name = preset.prefab.name;
+    
+  return go;
+}
+
+public void Destroy(GameObject go)
+{
+    if (go == null) return;
+    
+    if (HeadManager.Pool.Push(go)) return;
+    Object.Destroy(go);
+}
+            </code></pre>
+            <pre><code class="language-csharp">
+// 능력 데이터를 저장하는 AbilityDef.cs의 일부
+public class AbilityDef : ScriptableObject
+{ 
+    [Header("key")]
+    public int id;
+   
+    [Header("UI")] 
+    public Sprite icon;
+    public string title;
+    [TextArea] public string description;
+    public int weight = 10;
+    
+    [Header("Value with level")]
+    [Tooltip("먼저 생성된거 : 낮은 레벨, 나중에 생성된거 : 높은 레벨")]
+    public List&lt;float&gt; Values = new List&lt;float&gt;();
+   
+    [Header("Target")] public EAbilityTarget target;
+    [Header("Operator")] public EOperator op;
+    
+    private int _level = 0;
+    public int AbilityLevel =&gt; _level;
+    [SerializeField]private int _maxLevel = 990;
+    public int MaxLevel =&gt; _maxLevel;
+    protected Dictionary&lt;int, float&gt; abilityDict = new Dictionary&lt;int, float&gt;();
+   
+    private void OnEnable()
+    {
+        for (var i = 0; i &lt; Values.Count; i++)
+        {
+            abilityDict[i] = Values[i];
+        }
+    }
+     
+    /// &lt;summary&gt;
+    /// 상한선에 도달했는지 확인
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public bool IsCapped()
+    {
+        return _level &gt;= _maxLevel;
+    }
+     
+    /// &lt;summary&gt;
+    /// 기본 값에다 레벨에 따른 배율을 더해서 적용할 값 산출
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public float GetNextValue()
+    {
+        return abilityDict[_level];
+    }
+     
+    /// &lt;summary&gt;
+    /// Description 작성될 문자열을 반환
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public virtual string GetDescription()
+    {
+        return string.Format(description, GetNextValue());
+    }
+     
+    /// &lt;summary&gt;
+    /// Title영역에 작성될 문자열을 반환
+    /// title {number} LV
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public virtual string GetTitle()
+    {
+        string res = (_level + 1).ToString();
+        if (_level == _maxLevel - 1)
+            res = "MAX";
+        
+        return title +" "+ res + " LV";
+    }
+     
+    /// &lt;summary>
+    /// 실제 값 적용
+    /// &lt;/summary&gt;
+    /// &lt;returns&gt;&lt;/returns&gt;
+    public virtual float GetFinalValue()
+    {
+        // 캡이면 적용 안 함(원하면 다른 처리)
+        if (_level &gt;= _maxLevel)
+        {
+            Debug.LogError("[AbilityDef] Max level ability selected");
+            return 0; 
+        }
+        var val = GetNextValue();
+        _level++;
+        return val;
+    }
+}
+            </code></pre>
+          </details>
+        </div>
       </article>
     </section>
 
