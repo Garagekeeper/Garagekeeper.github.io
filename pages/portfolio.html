@@ -14,7 +14,8 @@ permalink: /portfolio
       <h2>프로젝트 개요</h2>
       <p>
         Unity 기반 FPS 싱글 플레이 프로젝트로 Unity3D를 공부및 FPS 프레임워크를
-        만들기위한 프로젝트입니다.
+        만들기위한 프로젝트입니다. 유니티에서 제공하는 ScriptableObject, Object
+        Pool등을 활용해 뱀서라이크 FPS를 만드는데 집중했습니다.
       </p>
     </section>
 
@@ -188,6 +189,7 @@ private void UpdateProgress()
             </code></pre>
           </details>
         </div>
+        <br />
         <div class="Problem2">
           <h3>2. UI 디자인패턴</h3>
           <ul>
@@ -385,6 +387,7 @@ public void SwapItem(int index)
             <br />
           </details>
         </div>
+        <br />
         <div class="Problem3">
           <h3>3. 데이터 관리 및 풀링</h3>
           <ul>
@@ -638,6 +641,7 @@ public class AbilityDef : ScriptableObject
             </code></pre>
           </details>
         </div>
+        <br />
       </article>
     </section>
 
@@ -1041,17 +1045,448 @@ public class SFXSource : MonoBehaviour
       <h2>관련 링크</h2>
       <ul>
         <li>
+          <a href="https://github.com/Garagekeeper/PEACEMAKER" target="_blank"
+            >GitHub Repository</a
+          >
+        </li>
+      </ul>
+    </section>
+  </div>
+  <hr />
+
+  <div class="project-container">
+    <h1 class="ptitle">3. 2D 멀티플레이 플레포머제작 프로젝트</h1>
+
+    <!-- Overview -->
+    <section>
+      <h2>프로젝트 개요</h2>
+      <p>
+        멀티 플레이가 가능한 2D 플랫포머 게임을 제작한 팀 프로젝트입니다. 단순히
+        게임을 구현하는 데서 그치지 않고, 실시간 멀티플레이 환경에서의 서버 구조
+        설계, 유저 제작 콘텐츠(맵 에디터) 공유, 클라이언트–서버–웹 서버 간 연동
+        구조를 직접 설계하고 구현하는 것을 목표로 했습니다.
+      </p>
+    </section>
+
+    <!-- ref -->
+    <section>
+      <h2>사용 기술</h2>
+      <ul>
+        <li>Unity</li>
+        <li>C#</li>
+        <li>Node.js</li>
+        <li>MariaDB</li>
+      </ul>
+    </section>
+
+    <!-- Roles -->
+    <section>
+      <h2>담당 역할</h2>
+      <ul>
+        <li>팀장</li>
+        <li>게임 서버</li>
+        <li>웹 서버</li>
+        <li>맵 에디터</li>
+        <p>
+          기획, 일정 관리와 더불어 핵심 기술 파트(서버,맵 에디터,웹)을 직접
+          담당했습니다.
+        </p>
+      </ul>
+    </section>
+
+    <!-- Video -->
+    <section>
+      <h2>플레이 영상</h2>
+      <div class="video-wrapper">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/wRBFfpuKVFw"
+          title="Gameplay Video"
+          allowfullscreen
+        >
+        </iframe>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/TrkjBKc6YD8"
+          title="Gameplay Video"
+          allowfullscreen
+        >
+        </iframe>
+      </div>
+    </section>
+
+    <!-- Core System -->
+    <section>
+      <h2>겪었던 문제와 해결 방안</h2>
+      <article>
+        <!--Problem 1-->
+        <div class="Problem">
+          <h3>1. 게임 서버를 어떻게 구현할 것인가</h3>
+          <ul>
+            <li>
+              <strong>문제</strong>
+              <p>
+                멀티플레이 게임을 위한 서버 구조 자체가 가장 큰 난제였습니다.
+                엔진이나 외부 프레임워크를 사용하면 빠르게 구현할 수 있었지만,
+                네트워크 흐름과 서버 동작을 정확히 이해하기 어렵다는 한계가
+                있었습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>선택</strong>
+              <ui>
+                <li>
+                  엔진 의존적인 서버 대신, TCP / UDP 소켓 기반의 게임 서버를
+                  처음부터 직접 구현했습니다.
+                </li>
+                <li>
+                  인터넷을 참고해, 패킷의 직렬화와 역직렬화를 포함시켰습니다.
+                </li>
+                <li>
+                  패킷 ID를 기준으로 처리 함수를 매핑하는 Packet Dispatcher
+                  구조를 도입했습니다.
+                </li>
+                <li>
+                  서버가 권한을 가지고 클라이언트들에게 뿌리는 방식을
+                  선택했습니다.
+                </li>
+              </ui>
+            </li>
+
+            <li>
+              <strong>결과</strong>
+              <ul>
+                <li>패킷 ID → 처리 함수 매핑 구조로 확장성 확보</li>
+                <li>서버 동작 흐름에 대한 명확한 이해 확보</li>
+              </ul>
+              <p>서버 구조를 직접 설계하고 구현한 경험을 얻을 수 있었습니다</p>
+            </li>
+          </ul>
+          <details class="code-sample">
+            <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+            <pre><code class="language-csharp">
+//Packet Dispatcher
+packetHandler = new Dictionary&lt;int, PacketHandler&gt;()
+{
+    { (int)ClientPackets.TCPConnenctinCheckReceived, serverHandle.TCPConnenctinCheckReceived },
+    { (int)ClientPackets.udpTestReceive, serverHandle.UDPTestReceive },
+    { (int)ClientPackets.playerMovement, serverHandle.PlayerMovement },
+    { (int)ClientPackets.playerShootBullet, serverHandle.PlayerBullet },
+    { (int)ClientPackets.playerShootGrenade, serverHandle.PlayerGrenade },
+    { (int)ClientPackets.playerStartVacuume, serverHandle.PlayerStartVaccume },
+    { (int)ClientPackets.playerEndVacuume, serverHandle.PlayerEndVaccume },
+    { (int)ClientPackets.ItemCollide, serverHandle.ItemCollide },
+    { (int)ClientPackets.readyToStartGame, serverHandle.ReadyToStartGame},
+    { (int)ClientPackets.playerJump, serverHandle.PlayerJump },
+    { (int)ClientPackets.playerRopeMove, serverHandle.PlayerRopeMove },
+    { (int)ClientPackets.goToNextPortal, serverHandle.GoToNextPortal },
+    { (int)ClientPackets.readyToRestart, serverHandle.ReadyToRestartGame },
+};
+            </code></pre>
+            <br />
+            <pre><code class="language-csharp">
+// Server Send packet example
+public void SpawnProjectile(Projectile _projectile, int _thrownByplayer)
+  {
+      using (Packet _packet = new Packet((int)ServerPackets.spawnProjectile))
+      {
+          int _cnt = server.clients[_thrownByplayer].player.GrenadeCount;
+          if (_cnt &gt; 0)
+          {
+              _packet.Write(_projectile.id);
+              _packet.Write(_projectile.transform.localPosition);
+              _packet.Write(_thrownByplayer);
+              _packet.Write(server.clients[_thrownByplayer].player.GrenadeCount);
+              sendTCPDataToAllInRoom(server.clients[_thrownByplayer].roomId, _packet);
+          }
+      }
+  }
+            </code></pre>
+
+            <pre><code class = "language-csharp">
+// Server Send packet example
+public void SendData(Packet _packet)
+  {
+      try
+      {
+          if (socket != null)
+          {
+              stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
+          }
+      }
+      catch (Exception _ex)
+      {
+          Debug.Log($"Error Sending data to Player{id} via TCP:{_ex}");
+      }
+  }
+    </code></pre>
+            <pre><code class="language-csharp">
+    // 패킷 직렬화
+    /// &lt;summary&gt;Adds a byte to the packet.&lt;/summary&gt;
+    /// &lt;param name=&quot;_value&quot;&gt;The byte to add.&lt;/param&gt;
+    public void Write(byte _value)
+    {
+        buffer.Add(_value);
+    }
+    /// &lt;summary&gt;Adds an int to the packet.&lt;/summary&gt;
+    /// &lt;param name=&quot;_value&quot;&gt;The int to add.&lt;/param&gt;
+    public void Write(int _value)
+    {
+        buffer.AddRange(BitConverter.GetBytes(_value));
+    }
+    public void Write(float _value)
+    {
+        buffer.AddRange(BitConverter.GetBytes(_value));
+    }
+    /// &lt;summary&gt;Adds a string to the packet.&lt;/summary&gt;
+    /// &lt;param name=&quot;_value&quot;&gt;The string to add.&lt;/param&gt;
+    public void Write(string _value)
+    {
+        Write(_value.Length); // Add the length of the string to the packet
+        buffer.AddRange(Encoding.ASCII.GetBytes(_value)); // Add the string itself
+    }
+    </code></pre>
+            <pre><code class="language-csharp">
+// 패킷 역직렬화
+public byte ReadByte(bool _moveReadPos = true)
+    {
+        if (buffer.Count &gt; readPos)
+        {
+            // If there are unread bytes
+            byte _value = readableBuffer[readPos]; // Get the byte at readPos&apos; position
+            if (_moveReadPos)
+            {
+                // If _moveReadPos is true
+                readPos += 1; // Increase readPos by 1
+            }
+            return _value; // Return the byte
+        }
+        else
+        {
+            throw new Exception(&quot;Could not read value of type &apos;byte&apos;!&quot;);
+        }
+    }
+
+    /// &lt;summary&gt;Reads an int from the packet.&lt;/summary&gt;
+    /// &lt;param name=&quot;_moveReadPos&quot;&gt;Whether or not to move the buffer&apos;s read position.&lt;/param&gt;
+    public int ReadInt(bool _moveReadPos = true)
+    {
+        if (buffer.Count &gt; readPos)
+        {
+            // If there are unread bytes
+            int _value = BitConverter.ToInt32(readableBuffer, readPos); // Convert the bytes to an int
+            if (_moveReadPos)
+            {
+                // If _moveReadPos is true
+                readPos += 4; // Increase readPos by 4
+            }
+            return _value; // Return the int
+        }
+        else
+        {
+            throw new Exception(&quot;Could not read value of type &apos;int&apos;!&quot;);
+        }
+    }
+
+    /// &lt;summary&gt;Reads a float from the packet.&lt;/summary&gt;
+    /// &lt;param name=&quot;_moveReadPos&quot;&gt;Whether or not to move the buffer&apos;s read position.&lt;/param&gt;
+    public float ReadFloat(bool _moveReadPos = true)
+    {
+        if (buffer.Count &gt; readPos)
+        {
+            // If there are unread bytes
+            float _value = BitConverter.ToSingle(readableBuffer, readPos); // Convert the bytes to a float
+            if (_moveReadPos)
+            {
+                // If _moveReadPos is true
+                readPos += 4; // Increase readPos by 4
+            }
+            return _value; // Return the float
+        }
+        else
+        {
+            throw new Exception(&quot;Could not read value of type &apos;float&apos;!&quot;);
+        }
+    }
+
+    /// &lt;summary&gt;Reads a string from the packet.&lt;/summary&gt;
+    /// &lt;param name=&quot;_moveReadPos&quot;&gt;Whether or not to move the buffer&apos;s read position.&lt;/param&gt;
+    public string ReadString(bool _moveReadPos = true)
+    {
+        try
+        {
+            int _length = ReadInt(); // Get the length of the string
+            string _value = Encoding.ASCII.GetString(readableBuffer, readPos, _length); // Convert the bytes to a string
+            if (_moveReadPos &amp;&amp; _value.Length &gt; 0)
+            {
+                // If _moveReadPos is true string is not empty
+                readPos += _length; // Increase readPos by the length of the string
+            }
+            return _value; // Return the string
+        }
+        catch
+        {
+            throw new Exception(&quot;Could not read value of type &apos;string&apos;!&quot;);
+        }
+    }
+
+            </code></pre>
+
+            <br />
+          </details>
+        </div>
+        <br />
+        <!--Problem 2-->
+        <div class="Problem">
+          <h3>2.맵 에디터 공유</h3>
+          <ul>
+            <li>
+              <strong>문제</strong>
+              <p>
+                맵 에디터를 이용해서 제작한 맵을 공유하는 기능이 필요헀습니다
+              </p>
+            </li>
+
+            <li>
+              <strong>선택</strong>
+              <p>
+                맵의 정보를 json형태로 저장해 공유할 수 있도록 nodejs, mariadb를
+                사용한 웹서버를 만들었습니다.
+              </p>
+            </li>
+
+            <li>
+              <strong>결과</strong>
+              <p>Api를 통해 맵을 웹서버에 등록, 조회할 수 있었습니다.</p>
+            </li>
+          </ul>
+          <details class="code-sample">
+            <summary>코드 예시 (클릭시 펼쳐짐)</summary>
+            <pre><code class="language-csharp">
+public void Share(GameObject _infoObject)
+{
+  var _mapName = _infoObject.transform.GetChild(0).GetComponent&lt;InputField&gt;();
+  Save(_mapName);
+
+  if(File.Exists(fullFilePath + &quot;.json&quot;) == false)
+  {
+      Debug.LogError(&quot;Load failed. There is no file.&quot;);
+      return;
+  }
+  string map_info = File.ReadAllText(fullFilePath + &quot;.json&quot;);
+
+  var map_tag = _infoObject.transform.GetChild(1).GetComponent&lt;InputField&gt;().text;
+  var map_difficulty = _infoObject.transform.GetChild(2).GetComponent&lt;InputField&gt;().text;
+ 
+  SaveDataClass _forSend = new SaveDataClass();
+  _forSend.map_info = map_info;
+  _forSend.map_tag = map_tag;
+  _forSend.map_difficulty = Int32.Parse(map_difficulty);
+  _forSend.map_maker = UserDataManager.instance.username;
+
+  string _forSendJson = JsonUtility.ToJson(_forSend);
+
+  StartCoroutine(MapShareProcess(_result =&gt;
+  {
+      if (_result)
+      {
+          Debug.Log(&quot;SAVE&quot;);
+          BackToMain();
+      }
+  }));
+}
+
+IEnumerator MapShareProcess(Action&lt;bool&gt; ResultHandler)
+{
+  using (UnityWebRequest request = UnityWebRequest.Put(UserDataManager.instance.apiUrl + &quot;api/map/apply&quot;, _forSendJson))
+  {
+    byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(_forSendJson);
+    request.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+    request.uploadHandler.Dispose();
+
+    request.uploadHandler = new UploadHandlerRaw(jsonToSend);
+    request.downloadHandler = new DownloadHandlerBuffer();
+
+    yield return request.SendWebRequest();
+    string _result = request.downloadHandler.text;
+
+    if (request.error != null)
+    {
+      Debug.Log(request.error);
+    }
+    else
+    {
+      Debug.Log(_result);
+      ResultHandler(true);
+    }
+
+    request.uploadHandler.Dispose();
+    request.downloadHandler.Dispose();
+    request.Dispose();
+  }
+}
+            </code></pre>
+            <pre><code class="language-javascript">
+  router.put(&quot;/apply&quot;, map.applyMap);
+
+  exports.applyMap = async (req, res) =&gt; {
+  if (!req.body) {
+    res.status(400).send({
+      message: &quot;req.body can not be empty!&quot;,
+    });
+  } else {
+    if (req.body.map_maker) {
+      const temp = await data.findUserById(req.body.map_maker);
+      if(temp.ok){
+          console.log(req.body.map_maker);
+      } else {
+        res.status(400).send({
+          message: &quot;applyMap err&quot;,
+        });
+        return;
+      }
+    }
+    map.createMap(req.body, (err, result) =&gt; {
+      if (err) {
+        res.status(400).send({
+          message: &quot;applyMap err&quot;,
+        });
+      } else {
+        res.send({
+          map_id: result.map_id,
+        });
+      }
+    });
+  }
+};
+            </code></pre>
+            <br />
+          </details>
+        </div>
+        <br />
+      </article>
+    </section>
+
+    <!-- Links -->
+    <section>
+      <h2>관련 링크</h2>
+      <ul>
+        <li>
           <a
-            href="https://github.com/Garagekeeper/Guns_GermsAndSteel"
+            href="https://github.com/orgs/Team-Pickles/repositories"
             target="_blank"
             >GitHub Repository</a
           >
         </li>
         <li>
           <a
-            href="https://garagekeeper.github.io/categories/gunsgermsandsteel/"
+            href="https://eight-galleon-dd7.notion.site/BASEMENT-CLEANER-ce6659eacfc14d228811e20e067a913d"
             target="_blank"
-            >기술 블로그</a
+            >조금 더 자세한 소개</a
           >
         </li>
       </ul>

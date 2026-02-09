@@ -53,3 +53,9 @@ This work is published under [MIT][mit] License.
 ```shell
 bundle exec jekyll serve --incremental --livereload --config _config.local.yml --limit_posts 10
 ```
+
+### code escape in HTML
+```shell
+ctrl shift p
+Escape HTML
+```
