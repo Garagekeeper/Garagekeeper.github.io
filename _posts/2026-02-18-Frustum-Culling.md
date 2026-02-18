@@ -10,7 +10,7 @@ mermaid: true
 
 # 1.절두체 (Frustum)
 위키에 따르면 절두체의 정의는 다음과 같다<br>
-기하학에서 [절두체 (Frustum)](google.com)는 입체(보통 원뿔이나 각뿔)를 절단하는 하나나 두 평행면 사이의 부분이다.
+기하학에서 [절두체 (Frustum)](https://en.wikipedia.org/wiki/Frustum)는 입체(보통 원뿔이나 각뿔)를 절단하는 하나나 두 평행면 사이의 부분이다.
 뭔가 직관적이지 않은 느낌이라면 이름을 그대로 해석하면 된다. 절두체 즉, '머리가 잘린 입체'이다. 아래의 그림까지 살펴보면 확실한 느낌이 온다.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Square_frustum.svg/250px-Square_frustum.svg.png)
