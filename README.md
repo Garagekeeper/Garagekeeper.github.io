@@ -59,3 +59,8 @@ bundle exec jekyll serve --incremental --livereload --config _config.local.yml -
 ctrl shift p
 Escape HTML
 ```
+
+### Warning
+&lt;sub&gt;를 함부로 쓰지 말것
+
+'#'를 소제목으로쓰면 아래의 내용이 미리보기로 ㅏㄴ옴
