@@ -17,13 +17,13 @@ mermaid: true
 
 ![ProfilerExample](/assets/img/ProfilerExample.png)
 <p align="center">
-  <sub>빌드된 게임의 프로파일링을 하는 장면</sub>
+  <span>빌드된 게임의 프로파일링을 하는 장면</span>
 </p>
 <br>
 
 ![ProfilerExample](/assets/img/ProfilerExample2.png)
 <p align="center">
-  <sub>프로파일러 화면, 어떤 요소가 CPU를 많이 점유하는지 확인할 수 있다</sub>
+  <span>프로파일러 화면, 어떤 요소가 CPU를 많이 점유하는지 확인할 수 있다</span>
 </p>
 
 <br>
