@@ -9,7 +9,7 @@ mermaid: true
 ---
 
 # Profiler
-[프로파일러]()는 게임의 성능에 관한 정보를 보여주는 툴이다. 이를 통해서 CPU, GPU, 랜더링, 메모리등의 수치를 확인해 볼 수 있다.
+[프로파일러](https://docs.unity3d.com/6000.3/Documentation/Manual/Profiler.html)는 게임의 성능에 관한 정보를 보여주는 툴이다. 이를 통해서 CPU, GPU, 랜더링, 메모리등의 수치를 확인해 볼 수 있다.
 
 에디터의 플레이모드에서 프로파일러를 실행하면 에디터 루프가 추가되어 실제 게임만의 데이터를 보기 쉽지 않으니 Development Build를 통해서 프로파일러에 연결해 사용하자 (Script Debugging을 사용하면 IDE에서 디버깅을 할 수 있다)
 
