@@ -46,7 +46,7 @@ This work is published under [MIT][mit] License.
 ## How To Use
 ### new Post
 ```shell 
-.\create-post.ps1 -Title "Unity Addressables 정리" 
+.\new-post.ps1 -Title "제목" 
 ```
 
 ### Local Test
