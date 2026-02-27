@@ -2,8 +2,8 @@
 title: "[Unity] Profiler를 통해 분석해보기"
 date: 2026-02-28 01:30:22 +0900
 description: 
-categories: [] #[upper, lower]
-tags: [] #must be lower
+categories: [Unity] #[upper, lower]
+tags: [c#] #must be lower
 math: true
 mermaid: true
 ---
