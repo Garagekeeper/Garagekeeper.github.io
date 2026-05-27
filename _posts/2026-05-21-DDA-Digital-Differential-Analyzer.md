@@ -3,7 +3,7 @@ title: "DDA와 RayCast"
 date: 2026-05-21 15:18:44 +0900
 description: ""
 categories: [Computer Science, Graphics] #[upper, lower]
-tags: [graphics] #must be lower
+tags: [graphics, raycast] #must be lower
 math: true
 mermaid: true
 ---
@@ -106,7 +106,7 @@ DeltaDist는 경계에서 그 다음 경계까지의 거리이다.
 
 ```
 deltaDistX^2 = 1^2 + (rayDirY * rayDirY) / (rayDirX * rayDirX)
-deltaDistY^2 = 1^2 + (rayDirX * rayDirX) / (rayDirY * rayDirY))
+deltaDistY^2 = 1^2 + (rayDirX * rayDirX) / (rayDirY * rayDirY)
 ```
 여기서 deltaDIstX를 피타고라스로 구할 수 있는데, x가 1이고 방향 벡터가 있으니 y증가분 (기울기)가 세로 성분의 기울기이다.
 
