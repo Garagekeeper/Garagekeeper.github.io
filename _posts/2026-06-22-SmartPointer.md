@@ -166,12 +166,20 @@ TRefCounterPtr<x> sp(new x());
 
 ### weak_ptr
 
-```graph TD
-    SP[SharedPtr] --> Obj[Object]
-    SP --> CB[Control Block]
-    WP[WeakPtr] -.-> CB
-    CB -.-> Obj
-    style CB fill:#f9f,stroke:#333,stroke-width:2px
+```
+	[ SharedPtr ]                [ Control Block ]          [ MyClass Object ]
++----------------+          +-------------------+      +------------------+
+| Ptr to Object  |--------->| Strong Count: 1   |      |                  |
++----------------+          | Weak Count: 1     |      |    MyClass       |
+| Ptr to CB      |--+       +-------------------+      |                  |
++----------------+  |       | Ptr to Object     |----->| (데이터 및 기능)   |
+                    |       +-------------------+      +------------------+
+                    |                 ^
+                    |                 |
+[ WeakPtr ]         |                 |
++----------------+  |                 |
+| Ptr to CB      |--+-----------------+
++----------------+
 ```
 
 * 오브젝트에 관여하는 것이 아니라, 제어 블록에 관여하는 포인터
