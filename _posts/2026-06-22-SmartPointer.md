@@ -7,11 +7,12 @@ tags: [cpp, unreal, memory_management ,unreal_gc] #must be lower
 math: true
 mermaid: true
 ---
+
 <br>
 
 # 동적 할당
 
-</br>
+<br>
 
 ## c style
 ```cpp
@@ -23,8 +24,7 @@ int* p = (int*)malloc(100);
 * 필요한 사이즈를 명시해야함
 * heap에 할당
 
-</br>
-
+<br>
 
 ## c++ style
 ```cpp
@@ -48,8 +48,8 @@ int* p = new int();
 	  * 반드시 delete를 쓰지 말고, 소멸자를 명시적으로 호출할 것.
 	  * 메모리 풀에서 메모리를 받아 placement new를 통해서 객체를 생성했다면 절대 delete를 사용하지마, 반드시 소멸자를 명시적으로 호출해. (delete는 메모리를 해제하려고 하는데, 풀의 일부분을 할당 해제하는 것은 안된다! 해제해도 풀 전체를 해제해야함.)
 
-</br>
-</br>
+<br>
+<br>
 
 
 # 발생할 수 있는 문제들
@@ -58,7 +58,7 @@ int* p = new int();
 * double free : 해제한 메모리를 다시 해제하려는 경우
 * use after free : 해제된 메모리를 사용하려는 경우
 
-</br>
+<br>
 
 # 문제 해결 방안
 ## ref count
@@ -107,14 +107,14 @@ int main()
 * 위와 같은 클래스를 상속 받아서 레프카운트를 관리
 * 처음 만들 때만 new를 사용하고 그 이후에는 임의로 new delete를 사용하지 않는다.
 
-</br>
+<br>
 
 * 단점 
   * 상속을 받는 것 자체가 단점
   * atomic으로 변수를 선언하면 오버헤드가 있음
   * 그렇다고 atomic을 사용하지 않으면 멀티쓰레드에서 문제가 발생함
 
-</br>
+<br>
 
 ## 스마트 포인터
 * Ref Count를 자동으로 관리하는 래퍼 클래스를 만들자.
@@ -156,7 +156,7 @@ TRefCounterPtr<x> sp(new x());
 	   * shared_ptr이 최초로 생성되면 (weak_ptr이 비어있으면) 제어블록 만들고 weak_ptr 멤버 변수 채움
 	   * weak_ptr 멤버 변수가 있으면 해당 제어블록의 shared_ptr 생성
 
-   </br>
+   <br>
    
 	* shared_ptr를 생성할 때 make_shared를 사용하자
 	  * shared_ptr<T>(new T)
@@ -166,12 +166,13 @@ TRefCounterPtr<x> sp(new x());
 
 ### weak_ptr
 
-graph TD
+```graph TD
     SP[SharedPtr] --> Obj[Object]
     SP --> CB[Control Block]
     WP[WeakPtr] -.-> CB
     CB -.-> Obj
     style CB fill:#f9f,stroke:#333,stroke-width:2px
+```
 
 * 오브젝트에 관여하는 것이 아니라, 제어 블록에 관여하는 포인터
   * weak count만 증가시킴
